@@ -1,0 +1,37 @@
+# =====================
+# Node / Frontend
+# =====================
+node_modules/
+frontend/node_modules/
+.next/
+out/
+
+# =====================
+# Java / Spring
+# =====================
+target/
+*.log
+
+# =====================
+# Docker
+# =====================
+*.pid
+
+# =====================
+# Env files
+# =====================
+.env
+.env.local
+
+# =====================
+# OS / Editor
+# =====================
+.DS_Store
+Thumbs.db
+.vscode/
+
+# =====================
+# Build artifacts
+# =====================
+dist/
+coverage/
