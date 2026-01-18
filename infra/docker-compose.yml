@@ -1,0 +1,106 @@
+services:
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+    restart: unless-stopped
+    networks:
+      - orl-network   # 🔥 THIS WAS MISSING
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    networks:
+      - orl-network   # 🔥 THIS WAS MISSING
+
+  api-gateway:
+    build: ../services/api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - auth-service
+      - order-service
+      - payment-service
+    restart: unless-stopped
+    networks:
+      - orl-network
+
+  auth-service:
+    build: ../services/auth-service
+    container_name: auth-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SERVER_PORT=8081
+    restart: unless-stopped
+    networks:
+      - orl-network
+
+  order-service:
+    build: ../services/order-service
+    container_name: order-service
+    ports:
+      - "8003:8003"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SERVER_PORT=8003
+    restart: unless-stopped
+    networks:
+      - orl-network
+
+  payment-service:
+    build: ../services/payment-service
+    container_name: payment-service
+    ports:
+      - "8004:8004"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SERVER_PORT=8004
+    restart: unless-stopped
+    networks:
+      - orl-network
+
+  chaos-service:
+    build: ../services/chaos-service
+    container_name: chaos-service
+    ports:
+      - "8005:8005"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SERVER_PORT=8005
+    depends_on:
+      - order-service
+      - payment-service
+    restart: unless-stopped
+    networks:
+      - orl-network
+
+volumes:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  orl-network:
+    driver: bridge

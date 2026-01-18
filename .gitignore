@@ -1,37 +1,41 @@
-# =====================
-# Node / Frontend
-# =====================
+# ===== OS =====
+.DS_Store
+Thumbs.db
+
+# ===== Node =====
 node_modules/
-frontend/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===== Next.js =====
 .next/
 out/
 
-# =====================
-# Java / Spring
-# =====================
-target/
-*.log
-
-# =====================
-# Docker
-# =====================
-*.pid
-
-# =====================
-# Env files
-# =====================
+# ===== Env =====
 .env
 .env.local
+.env.*.local
 
-# =====================
-# OS / Editor
-# =====================
-.DS_Store
-Thumbs.db
+# ===== Logs =====
+*.log
+
+# ===== Java / Maven =====
+target/
+*.class
+
+# ===== IDE =====
 .vscode/
+.idea/
 
-# =====================
-# Build artifacts
-# =====================
-dist/
-coverage/
+# ===== Docker =====
+*.pid
+
+# ===== Frontend =====
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# ===== Infra =====
+infra/prometheus_data/
+infra/grafana_data/
