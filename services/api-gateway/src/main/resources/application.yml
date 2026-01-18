@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: api-gateway
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
+  metrics:
+    tags:
+      application: api-gateway
+
+auth-service:
+  url: http://auth-service:8081
+
+orders-service:
+  url: http://orders-service:8082
+
+payments-service:
+  url: http://payments-service:8083
